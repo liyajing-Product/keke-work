@@ -23,6 +23,7 @@ export default function App() {
   const s1 = p < 0.2 ? 1 : Math.max(0, 1 - (p - 0.2) / 0.08);
   const s2 = p < 0.32 ? 0 : p < 0.4 ? (p - 0.32) / 0.08 : p < 0.55 ? 1 : Math.max(0, 1 - (p - 0.55) / 0.08);
   const s3 = p < 0.67 ? 0 : p < 0.75 ? (p - 0.67) / 0.08 : 1;
+  const finalImageOpacity = Math.max(0, Math.min(1, (p - 0.63) / 0.12));
 
   const goTo = (progress: number) => {
     setMenuOpen(false);
@@ -71,6 +72,8 @@ export default function App() {
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <video ref={videoRef} src={VIDEO_SRC} className="absolute inset-0 h-full w-full object-cover" muted playsInline preload="auto" aria-hidden="true" />
         <canvas ref={canvasRef} width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300" style={{ opacity: canvasLive ? 1 : 0 }} aria-hidden="true" />
+        {/* Comment 1: the last scene crossfades to the snowboarding photograph. */}
+        <img src="/images/snowboard-young-adult.png" alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover object-[35%_center] transition-opacity duration-300 md:object-center" style={{ opacity: finalImageOpacity }} fetchPriority="high" />
         <div className="pointer-events-none absolute inset-0">
           <nav aria-label="Main navigation" className="pointer-events-auto absolute inset-x-0 top-0 z-50 flex items-center justify-between px-6 pb-6 pt-8 transition-colors duration-500 sm:px-8 sm:pt-12 md:px-12" style={{ color: isLight ? '#fff' : DARK }}>
             <div className="hidden items-center gap-8 lg:flex xl:gap-10">
@@ -114,9 +117,9 @@ export default function App() {
 
           <section aria-hidden={s3 <= 0.3} className={`${sceneClass} flex items-center justify-end px-6 sm:px-8 md:px-20 lg:px-32`} style={sectionStyle(s3)}>
             <div className="max-w-2xl text-left">
-              <Stagger visible={s3 > 0.3}><p className="mb-4 text-lg tracking-wide text-white/60">Halder | Nordvik</p></Stagger>
-              <Stagger visible={s3 > 0.3} delay={150}><h2 className="mb-8 text-[clamp(2rem,4vw,4rem)] font-light uppercase leading-[1.2] tracking-wide text-white">Fueling ambition,<br />shaping tomorrow.</h2></Stagger>
-              <Stagger visible={s3 > 0.3} delay={300}><a tabIndex={s3 > 0.3 ? 0 : -1} href="mailto:" className={`${s3 > 0.3 ? 'pointer-events-auto' : ''} inline-flex items-center gap-4`}><span className="text-sm uppercase tracking-[0.3em] text-white/80">Contact Nordvik</span><span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-800 transition-transform duration-300 hover:scale-110"><ArrowRight size={16} /></span></a></Stagger>
+              {/* Comments 2–4: replace both text lines and remove the contact CTA. */}
+              <Stagger visible={s3 > 0.3}><p className="mb-4 text-lg tracking-wide text-white/60">Don't follow the beaten track, only follow your passion.</p></Stagger>
+              <Stagger visible={s3 > 0.3} delay={150}><h2 className="text-[clamp(2rem,4vw,4rem)] font-light uppercase leading-[1.2] tracking-wide text-white">FIND YOUR OWN LINE</h2></Stagger>
             </div>
           </section>
         </div>

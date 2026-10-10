@@ -1,6 +1,6 @@
 # Scroll Tied Video Section
 
-按提供的提示词制作的独立电影感单页作品展示。保留原始英文文案、VECTRUS 导航、指定 CloudFront 视频、字体与三段顺序场景。
+按提供的提示词制作的独立电影感单页作品展示。使用 VECTRUS 导航、指定 CloudFront 视频、字体与三段顺序场景，最后一屏按用户批注更新为单板滑雪主题。
 
 ## 本地运行
 
@@ -24,6 +24,15 @@ npm run preview
 
 提示词未指定导航目标，因此导航与箭头在已有三段场景之间跳转。NEWS 跳转到第二段。MENU 在桌面和移动端均可打开菜单，支持 Escape 关闭和键盘焦点限制。
 
-提示词未提供联系邮箱，Contact Nordvik / CONTACT 暂使用未填写收件人的 `mailto:`，可在 `src/App.tsx` 中替换为实际邮箱。个人姓名与作品资料未提供，因此保持提示词中的原始品牌和文案。
+提示词未提供联系邮箱，菜单中的 CONTACT 暂使用未填写收件人的 `mailto:`，可在 `src/App.tsx` 中替换为实际邮箱。
 
 视频与字体直接使用指定的远程地址，不复制为本地素材、不使用视频遮罩，也不自动播放。
+
+## 本轮批注修改
+
+1. 最后一屏替换为青年单板滑雪照片：`public/images/snowboard-young-adult.png`，图片在滚动进度 63%–75% 之间渐入。
+2. 大标题替换为 `FIND YOUR OWN LINE`。
+3. 上方副标题替换为 `Don't follow the beaten track, only follow your passion.`。
+4. 删除最后一屏 Contact Nordvik 文字和箭头按钮。
+
+相关代码用 Comment 1 / Comments 2–4 标注。图片由内置 imagegen 生成，生成提示词保存于 `design/image-prompt.md`。
