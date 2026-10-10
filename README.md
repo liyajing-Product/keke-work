@@ -36,3 +36,11 @@ npm run preview
 4. 删除最后一屏 Contact Nordvik 文字和箭头按钮。
 
 相关代码用 Comment 1 / Comments 2–4 标注。图片由内置 imagegen 生成，生成提示词保存于 `design/image-prompt.md`。
+
+## 首屏修改
+
+- 底图采用用户提供的 `Hero — Ski season.png`，保存在 `public/images/hero-ski-season.png`。
+- 大标题替换为 `SKI SEASON`。
+- 删除首屏副标题。
+
+首屏相关代码以 First-screen revision 标注。

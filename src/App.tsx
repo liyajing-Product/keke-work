@@ -72,8 +72,10 @@ export default function App() {
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <video ref={videoRef} src={VIDEO_SRC} className="absolute inset-0 h-full w-full object-cover" muted playsInline preload="auto" aria-hidden="true" />
         <canvas ref={canvasRef} width={1920} height={1080} className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300" style={{ opacity: canvasLive ? 1 : 0 }} aria-hidden="true" />
+        {/* First-screen revision: use the supplied ski-season photograph. */}
+        <img src="/images/hero-ski-season.png" alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300" style={{ opacity: s1 }} fetchPriority="high" />
         {/* Comment 1: the last scene crossfades to the snowboarding photograph. */}
-        <img src="/images/snowboard-young-adult.png" alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover object-[35%_center] transition-opacity duration-300 md:object-center" style={{ opacity: finalImageOpacity }} fetchPriority="high" />
+        <img src="/images/snowboard-young-adult.png" alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover object-[35%_center] transition-opacity duration-300 md:object-center" style={{ opacity: finalImageOpacity }} />
         <div className="pointer-events-none absolute inset-0">
           <nav aria-label="Main navigation" className="pointer-events-auto absolute inset-x-0 top-0 z-50 flex items-center justify-between px-6 pb-6 pt-8 transition-colors duration-500 sm:px-8 sm:pt-12 md:px-12" style={{ color: isLight ? '#fff' : DARK }}>
             <div className="hidden items-center gap-8 lg:flex xl:gap-10">
@@ -95,9 +97,10 @@ export default function App() {
           <section aria-hidden={s1 <= 0.3} className={`${sceneClass} flex items-center px-6 sm:px-8 md:px-20 lg:px-32`} style={sectionStyle(s1)}>
             <div>
               <Stagger visible={s1 > 0.3}>
-                <h1 className="text-[clamp(2rem,5vw,5rem)] font-light uppercase leading-[1.2] text-navy">Advancing resources for a cleaner future</h1>
+                {/* First-screen revision: replace the headline with SKI SEASON. */}
+                <h1 className="text-[clamp(2rem,5vw,5rem)] font-light uppercase leading-[1.2] text-navy">SKI SEASON</h1>
               </Stagger>
-              <Stagger visible={s1 > 0.3} delay={150}><p className="mt-6 text-sm uppercase tracking-[0.3em] text-[#1D304590]">Sustainable power with purpose</p></Stagger>
+              {/* First-screen revision: remove the subtitle per browser comment 3. */}
             </div>
             <Stagger visible={s1 > 0.3} delay={300} className="absolute bottom-12 right-6 sm:right-8 md:right-12">
               <button type="button" tabIndex={s1 > 0.3 ? 0 : -1} onClick={() => goTo(0.4)} aria-label="Explore partnerships" className={`${s1 > 0.3 ? 'pointer-events-auto' : ''} flex h-12 w-12 items-center justify-center rounded-full border border-navy/50 text-navy transition-opacity hover:opacity-70`}><ArrowRight size={18} /></button>
