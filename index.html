@@ -3,12 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#1D3045" />
-    <title>Scroll Tied Video Section</title>
+    <meta name="theme-color" content="#000000" />
+    <title>ALPINE — SKIING</title>
+    <style>
+      body:has(#site-entrance){overflow:hidden}
+      #site-entrance{position:fixed;inset:0;z-index:100;background:#050709;color:#fff;display:grid;place-items:center;transition:opacity .65s ease,visibility .65s;}
+      #site-entrance.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+      .entrance-lockup{display:flex;flex-direction:column;align-items:center;gap:26px}
+      .entrance-lockup svg{width:clamp(100px,13vw,160px);overflow:visible}
+      .entrance-mark-track{opacity:.12}
+      .entrance-mark-draw{fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:alpine-trace 1.35s cubic-bezier(.55,0,.3,1) forwards}
+      .entrance-brand{font:300 clamp(17px,2vw,23px)/1.1 'Readex Pro',system-ui,sans-serif;letter-spacing:.04em}
+      .entrance-status{font:300 11px/1.5 'Readex Pro',system-ui,sans-serif;color:#819097;letter-spacing:.12em}
+      .entrance-status span{display:inline-block;animation:alpine-wait 1.2s ease-in-out infinite alternate}
+      @keyframes alpine-trace{to{stroke-dashoffset:0}}
+      @keyframes alpine-wait{to{opacity:.25}}
+      @media(prefers-reduced-motion:reduce){.entrance-mark-draw{animation:none;stroke-dashoffset:0}.entrance-status span{animation:none}#site-entrance{transition:none}}
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://db.onlinewebfonts.com/c/95cecf452d3208890088a5b4c19c7ecf?family=Helvetica+Neue+ME" rel="stylesheet" />
   </head>
   <body>
+    <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute;pointer-events:none">
+      <defs><symbol id="alpine-mark" viewBox="0 0 64 52"><path d="M5 45 20 6 32 23 41 14 58 45Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></symbol></defs>
+    </svg>
+    <div id="site-entrance" role="status" aria-label="loading alpine" aria-live="polite">
+      <div class="entrance-lockup">
+        <svg viewBox="0 0 64 52" aria-hidden="true"><use href="#alpine-mark" class="entrance-mark-track"/><path class="entrance-mark-draw" d="M5 45 20 6 32 23 41 14 58 45Z" pathLength="1" /></svg>
+        <span class="entrance-brand">白境 / ALPINE</span>
+        <span class="entrance-status">preparing your ride<span aria-hidden="true">&nbsp;·&nbsp;·&nbsp;·</span></span>
+      </div>
+    </div>
     <div id="root"></div>
+    <script>
+      // Release the entrance even if the app bundle or a remote asset fails.
+      window.setTimeout(function(){document.getElementById('site-entrance')?.remove()},6500);
+    </script>
+    <!-- Scroll animation runtime: CDN scripts live at the bottom of the HTML. -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" onerror="document.documentElement.dataset.motionCdn='failed';window.dispatchEvent(new Event('alpine:motion-error'))"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" onload="window.dispatchEvent(new Event('alpine:motion-ready'))" onerror="document.documentElement.dataset.motionCdn='failed';window.dispatchEvent(new Event('alpine:motion-error'))"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

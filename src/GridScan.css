@@ -1,0 +1,5 @@
+/* Decorative background; pointer input is observed on the parent section. */
+.gridscan { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; }
+.gridscan canvas { display: block; width: 100%; height: 100%; }
+.gridscan--fallback { background: radial-gradient(ellipse at 50% 58%, #ff9ffc18, transparent 65%); }
+.gridscan--fallback canvas { visibility: hidden; }

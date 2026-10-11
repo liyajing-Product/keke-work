@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { Sample, Track } from 'mp4box';
 
-const LERP_TAU = 8;
-const SNAP = 0.002;
 const LRU_MAX = 24;
 const LEAD = 24;
 const WATCHDOG = 60000;
@@ -21,46 +19,33 @@ function nearestIndex(bank: BankFrame[], seconds: number) {
   return lo > 0 && Math.abs(bank[lo - 1].ts - ts) < Math.abs(bank[lo].ts - ts) ? lo - 1 : lo;
 }
 
-export function useVideoScrub(videoSrc: string) {
-  const containerRef = useRef<HTMLDivElement>(null);
+export function useVideoScrub(videoSrc: string, progress: MutableRefObject<number>, staticMotion: boolean) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [canvasLive, setCanvasLive] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current!;
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext('2d');
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (staticMotion) { video.pause(); setCanvasLive(false); return; }
     const abort = new AbortController();
     const lru = new Map<number, ImageBitmap | null>();
     let bank: BankFrame[] = [];
     let current = 0;
-    let target = 0;
     let dur = Number.isFinite(video.duration) ? video.duration : 0;
-    let span = 1;
-    let origin = 0;
     let ready = false;
     let reverted = false;
     let painted = false;
     let building = false;
     let stopped = false;
     let lastPainted = -1;
-    let lastProgress = -1;
-    let lastTime = performance.now();
     let animation = 0;
     let watchdog: ReturnType<typeof setTimeout> | undefined;
     let decoder: VideoDecoder | undefined;
     let wakeDecode: (() => void) | undefined;
     let failDecode: ((error: Error) => void) | undefined;
 
-    const resize = () => {
-      const container = containerRef.current;
-      if (!container) return;
-      origin = container.getBoundingClientRect().top + window.scrollY;
-      span = Math.max(1, container.offsetHeight - window.innerHeight);
-    };
     const metadata = () => {
       if (Number.isFinite(video.duration) && video.duration > 0) dur = video.duration;
       video.pause();
@@ -111,16 +96,11 @@ export function useVideoScrub(videoSrc: string) {
       lastPainted = index;
       if (!painted) { painted = true; setCanvasLive(true); }
     };
-    const tick = (now: number) => {
+    // GSAP's scrubbed timeline is the single progress source; no second scroll sampler.
+    const tick = () => {
       if (stopped) return;
-      const dt = Math.min(0.1, (now - lastTime) / 1000);
-      lastTime = now;
-      const p = clamp((window.scrollY - origin) / span);
-      if (p !== lastProgress) { setScrollProgress(p); lastProgress = p; }
+      current = clamp(progress.current) * dur;
       if (dur > 0) {
-        target = p * dur;
-        current = motion.matches ? target : current + (target - current) * (1 - Math.exp(-dt * LERP_TAU));
-        if (Math.abs(target - current) < SNAP) current = target;
         if (ready) paint();
         else if (!video.seeking && Math.abs(video.currentTime - current) > 0.01) {
           try { video.currentTime = Math.min(current, Math.max(0, dur - 0.001)); } catch { /* Metadata may still be loading. */ }
@@ -260,7 +240,7 @@ export function useVideoScrub(videoSrc: string) {
     }
 
     const build = async () => {
-      if (building || stopped || motion.matches || !('VideoDecoder' in window)) return;
+      if (building || stopped || !('VideoDecoder' in window)) return;
       building = true;
       watchdog = setTimeout(() => { if (!stopped) fallback(); }, WATCHDOG);
       try {
@@ -278,12 +258,7 @@ export function useVideoScrub(videoSrc: string) {
         if (!stopped) fallback();
       } finally { clearTimeout(watchdog); building = false; }
     };
-    const motionChanged = () => { if (motion.matches) fallback(); };
-    resize();
     video.addEventListener('loadedmetadata', metadata);
-    window.addEventListener('resize', resize);
-    window.addEventListener('orientationchange', resize);
-    motion.addEventListener('change', motionChanged);
     animation = requestAnimationFrame(tick);
     if (document.readyState === 'complete') void build();
     else window.addEventListener('load', build, { once: true });
@@ -297,14 +272,11 @@ export function useVideoScrub(videoSrc: string) {
       if (decoder && decoder.state !== 'closed') decoder.close();
       wakeDecode?.();
       video.removeEventListener('loadedmetadata', metadata);
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('orientationchange', resize);
       window.removeEventListener('load', build);
-      motion.removeEventListener('change', motionChanged);
       closeLRU();
       bank = [];
     };
-  }, [videoSrc]);
+  }, [videoSrc, progress, staticMotion]);
 
-  return { containerRef, videoRef, canvasRef, scrollProgress, canvasLive };
+  return { videoRef, canvasRef, canvasLive };
 }

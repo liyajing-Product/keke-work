@@ -1,0 +1,4 @@
+.light-rays-container { width: 100%; height: 100%; position: relative; pointer-events: none; overflow: hidden; }
+.light-rays-container canvas { display: block; width: 100%; height: 100%; }
+.light-rays-container.is-static { background: conic-gradient(from 153deg at 50% -20%, transparent 0deg, #83d7e31f 7deg, transparent 15deg, #83d7e326 24deg, transparent 33deg, #83d7e319 46deg, transparent 57deg); }
+.light-rays-container.is-static canvas { display: none; }
