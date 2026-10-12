@@ -2,8 +2,8 @@
 
 ## GitHub 发布
 
-- 项目仓库：https://github.com/keke28-svg/keke-work
-- GitHub Pages：https://keke28-svg.github.io/keke-work/
+- 项目仓库：https://github.com/liyajing-Product/keke-work
+- GitHub Pages：https://liyajing-product.github.io/keke-work/
 - 推送到 `main` 后，`.github/workflows/deploy-pages.yml` 自动构建并部署。仓库 Settings → Pages 的 Source 设为 GitHub Actions。
 - 部署构建由 GitHub Pages 元数据设置 Vite 的 base 路径，产品图片使用 `import.meta.env.BASE_URL`，兼容项目子目录与根域名部署。
 
