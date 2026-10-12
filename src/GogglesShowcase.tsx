@@ -79,7 +79,7 @@ export function GogglesShowcase({ active, rendering, onContinue }: { active: boo
         catch (error) { reject(error); }
       };
       image.onerror = reject;
-      image.src = `/images/goggles/${view.file}`;
+      image.src = `${import.meta.env.BASE_URL}images/goggles/${view.file}`;
     }))).then(result => { if (!cancelled) setViews(result); }).catch(() => { if (!cancelled) setLoadError(true); });
     return () => { cancelled = true; painterRef.current = null; painter.dispose(); };
   }, []);
@@ -238,8 +238,8 @@ export function GogglesShowcase({ active, rendering, onContinue }: { active: boo
       }}>
       <div className="goggles-product-motion"><div className={`goggles-assembly ${exploded ? 'is-exploded' : ''}`}>
         <canvas ref={bodyCanvas} width={W} height={H} className="goggles-body" aria-hidden="true" />
-        <img src="/images/goggles/goggles-frame-component.png" className="goggles-separated-frame" alt="" aria-hidden="true" draggable={false} />
-        <img src="/images/goggles/goggles-strap-component.png" className="goggles-separated-strap" alt="" aria-hidden="true" draggable={false} />
+        <img src={`${import.meta.env.BASE_URL}images/goggles/goggles-frame-component.png`} className="goggles-separated-frame" alt="" aria-hidden="true" draggable={false} />
+        <img src={`${import.meta.env.BASE_URL}images/goggles/goggles-strap-component.png`} className="goggles-separated-strap" alt="" aria-hidden="true" draggable={false} />
         <canvas ref={lensCanvas} width={W} height={H} className="goggles-lens" aria-hidden="true" />
         {exploded && <div className="goggles-component-labels" aria-hidden="true"><span>lens</span><span>frame</span><span>strap</span></div>}
       </div></div>

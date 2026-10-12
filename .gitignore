@@ -2,4 +2,5 @@ node_modules/
 dist/
 *.tsbuildinfo
 .sites-runtime/
+.netlify/
 .openai/*.tar.gz

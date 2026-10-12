@@ -1,5 +1,12 @@
 # Scroll Tied Video Section
 
+## GitHub 发布
+
+- 项目仓库：https://github.com/keke28-svg/keke-work
+- GitHub Pages：https://keke28-svg.github.io/keke-work/
+- 推送到 `main` 后，`.github/workflows/deploy-pages.yml` 自动构建并部署。仓库 Settings → Pages 的 Source 设为 GitHub Actions。
+- 部署构建由 GitHub Pages 元数据设置 Vite 的 base 路径，产品图片使用 `import.meta.env.BASE_URL`，兼容项目子目录与根域名部署。
+
 按提供的提示词制作的独立电影感单页作品展示。首屏为居中 SKIING 视频主题，第二屏为滑雪镜产品探索，第三屏为带 LightRays 的纯 SVG 雪板结构拆解，第四屏为银灰粒子云与个性宣言，第五屏为 ALPINE 装备目录。
 
 ## 本地运行
